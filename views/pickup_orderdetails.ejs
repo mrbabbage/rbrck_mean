@@ -1,0 +1,121 @@
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Alyom Partner</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" >
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <link href="css/app.css" rel="stylesheet">
+        <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="js/printelement.js"></script>
+    </head>
+
+    <body >
+<br>
+        <span class="navbar-brand-mobile"><img src="assets/logos/comet_logo.png" height="100vh"> <span class="navbar-brand-mobile-title">delivery</span><a href="/logout"><button class="logout-button-mobile" ><i class="fas fa-sign-out-alt"></i></button></a>
+</span>
+        <nav class="nav">
+          <a class="nav-item-mobile-active" href="/pickup">Pick Up</a>
+          <a class="nav-item-mobile" href="/deliveries">Drop Off</a>
+        </nav>
+
+        <br><br>
+
+                <span class="tracking_mobile">Tracking # <%= order[0].order_id %></span><button class="print_button_mobile" type="button" name="button" onclick="popup()"><i class="fas fa-print"></i></button>
+
+        <table class="table-mobile">
+            <% products.forEach(function(p){ %>
+                <% order[0].order.line_items.forEach(function(o, index){ %>
+
+                    <% if (p.id===o.product_id){ %>
+                        <tr>
+                            <td class="order_detail_image_table_mobile "><img src="<%= p.image.src %>" width="100%"></td>
+                            <td class="order_title_info_table_mobile">  SKU:<br>
+                                                                                        Name:<br>
+                                                                                        Size:<br>
+                                                                                        Quantity: <%= order[0].order.line_items[index].quantity %><br>
+                            </td>
+                            <td class="order_detail_info_table_mobile"> <%= p.id %><br>
+                                                                                        <%= p.title %> <br>
+                                                                                        <%= order[0].order.line_items[index].variant_title %><br>
+                                                                                        Price: $<%= p.variants[0].price %> <br>
+
+                            </td>
+
+
+                        </tr>
+                    <% } %>
+                <% }) %>
+            <% }); %>
+
+        </table>
+
+
+<br>
+<div class="form-group">
+    <form action="/pickup<%= order[0].order_id %> " method="POST">
+        <textarea class="mobile-comment-textarea"name="order_comment" ></textarea>
+        <input class="mobile-text-submit-button" type="submit" value="add">
+    </form>
+</div>
+<br><br><br><br><br><br><br><br>
+<div >
+<form action="/pickup<%= order[0].order_id %> " method="POST">
+        <input class="pickup_button_mobile" type="submit" name="packaged" value="✓" />
+    </form>
+</div>
+
+
+<!-- ///////////////////////////////////////////////
+///////////////////////////////////////////////
+/////////////////////////////////////////////// -->
+<div class = "label-popup-mobile show-mobile" onclick="popup()">
+<!-- <button class="exit-label-mobile" type="button" name="button" onclick="popup()">X</button> -->
+            <table  class="label-mobile">
+
+                            <tr>
+                                <td  colspan="2"class="header_label-mobile">RBRCK Delivery<img class="logo_label-mobile" src="assets/logos/rbrck_logo_white.png"></td>
+
+                            </tr>
+
+                            <tr>
+                                <td class="ship_label-mobile">  Ship to:<br></td>
+                                <td class="address_label-mobile">
+                                    <%= order[0].order.shipping_address.first_name %>    <%= order[0].order.shipping_address.last_name %><br><br>
+                                    <%= order[0].order.shipping_address.address1 %> ,<%= order[0].order.shipping_address.address2 %><br>
+                                    <%= order[0].order.shipping_address.city %> ,  <%= order[0].order.shipping_address.zip %>,<br>
+                                    <%= order[0].order.shipping_address.country %> <br>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="qr_info_label-mobile">
+                                OD: <%= order[0].order.created_at.slice(8, 10) + "-"+order[0].order.created_at.slice(5, 7)+"-"+order[0].order.created_at.slice(0, 4) %> <br>
+                                Si: None<br>
+                                Desc: Clothing <br>
+                                Return Service<br>
+                                Ref. Enclosed<br>
+                            </td>
+                                <td class="qr_label-mobile"><img class="qr_code-mobile" src="https://api.qrserver.com/v1/create-qr-code/?data=<%= order[0].order_id %>" alt="" title="" width="150px" /></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" class="tracking_label-mobile">Tracking # <span style="font-weight:500;"><%= order[0].order_id %></span></td>
+                            </tr>
+
+
+            </table>
+
+        </div>
+
+<script type="text/javascript">
+
+        function popup(){
+            $("div.label-popup-mobile").toggleClass("show-mobile");
+        }
+
+</script>
+
+
+</body>
+</html>

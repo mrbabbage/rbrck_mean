@@ -1,0 +1,57 @@
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Alyom Partner</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" >
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <link href="css/app.css" rel="stylesheet">
+        <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+    </head>
+    <body>
+
+<table class=\"label">
+
+                <tr>
+                    <td  colspan="2"class="header_label">Alyom Delivery<img class="logo_label" src="assets/logos/alyom_logo_white.png"></td>
+
+                </tr>
+
+                <tr>
+                    <td class="ship_label">  Ship to:<br></td>
+                    <td class="address_label">
+                        <%= order[0].shipping_address.first_name %>    <%= order[0].shipping_address.last_name %><br><br>
+                        <%= order[0].shipping_address.address1 %> ,<br>
+                        <%= order[0].shipping_address.address2 %> ,<br>
+                        <%= order[0].shipping_address.city %>    <%= order[0].shipping_address.zip %>,<br>
+                        <%= order[0].shipping_address.country %> <br>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="qr_info_label">
+                    OD: <%= order[0].order_date %><br>
+                    Si: None<br>
+                    Desc: Clothing <br>
+                    Return Service<br>
+                    Ref. Enclosed<br>
+                </td>
+                    <td class="qr_label"><img class="qr_code" src="https://api.qrserver.com/v1/create-qr-code/?data=<%= order[0].order_id %>&amp;size=100x100" alt="" title="" width="150px" /></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="tracking_label">Tracking # <span style="font-weight:500;"><%= order[0].order_id %></span></td>
+                </tr>
+
+
+</table>
+
+
+
+
+
+
+
+
+</body>
+</html>

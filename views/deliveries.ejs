@@ -1,0 +1,45 @@
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Alyom Partner</title>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" >
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+        <link href="css/app.css" rel="stylesheet">
+        <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="js/printelement.js"></script>
+    </head>
+
+    <body>
+<br>
+<span class="navbar-brand-mobile"><img src="assets/logos/comet_logo.png" height="100vh"> <span class="navbar-brand-mobile-title">delivery</span><a href="/logout"><button class="logout-button-mobile" ><i class="fas fa-sign-out-alt"></i></button></a>
+</span>
+        <nav class="nav">
+          <a class="nav-item-mobile" href="/pickup">Pick Up</a>
+          <a class="nav-item-mobile-active" href="/deliveries">Drop Off</a>
+        </nav>
+
+<table class="deliveries_table">
+<% if (courier_order[0]){  %>
+    <% orders.forEach(function(o){ %>
+        <% if (courier_order[0].active_orders.indexOf(o)){  %>
+        <tr class="">
+            <td class="deliveries_table_row"> <a class="orders_link" href="/deliveries<%= o.order_id %>">Order #<%= o.order_id %> </a>
+                <% if (o.delivered==true){ %>
+                    <span class="order_details_courier_table">Delivered<i class="fas fa-square green-square" ></i></span>
+                <% } else{%>
+                    <span class="order_details_courier_table">Delivered<i class="fas fa-square red-square" ></i></span>
+                <% } %>
+                <br>
+                <span class="address_deliveries"> <%= o.order.shipping_address.address1+" "+o.order.shipping_address.address2 %></span><br>
+            </td>
+        </tr>
+        <% }; %>
+    <% }); %>
+    <% }; %>
+</table>
+
+
+
+</body>
+</html>

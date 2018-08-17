@@ -1,0 +1,187 @@
+<% include partials/header %>
+<!--      <nav class="navbar navbar-light fixed-top bg-light flex-md-nowrap p-0">    -->
+    <nav class="navbar navbar-light fixed-top flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><img src="assets/logos/comet_logo.png" height="30px"></a>
+      <!--      class="form-control form-control-dark w-100"    -->
+      <i class="fas fa-search"></i><input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="logout" href="#">LOG OUT</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+              <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                      <li class="nav-item"><a class="nav-link active" href="/orders-admin">Orders</a></li>
+                      <li class="nav-item"><a class="nav-link" href="/inventory-admin">Inventory</a></li>
+                      <li class="nav-item"><a class="nav-link" href="/receipts">Receipts</a></li>
+                      <li class="nav-item"><a class="nav-link" href="/registery">Registery</a></li>
+                      <li class="nav-item"><a class="nav-link" href="/help">Help</a></li>
+                </ul>
+              </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4"><div class="chartjs-size-monitor" style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h3">Order: <span style="color: #8F2CFA;"><%= order[0].order_id %> </span> <% if (order[0].packaged==true){ %>
+                    <i class="fas fa-square green-square" ></i>
+                <% } else{%>
+                        <i class="fas fa-square red-square" ></i>
+                <% } %>
+
+                <% if (order[0].delivered==true){ %>
+                    <i class="fas fa-square green-square" ></i>
+                <% } else{%>
+                    <i class="fas fa-square red-square" ></i>
+                <% } %>
+
+                <% if (order[0].fulfilled==true){ %>
+                    <i class="fas fa-square green-square" ></i>
+                <% } else{%>
+                    <i class="fas fa-square red-square"></i>
+                <% } %>
+                </h1>
+
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+
+
+                      <% if(order[0].fulfilled!=true){ %>
+                              <form action="/admin<%= order[0].order_id %> " method="POST">
+                                  <input type="checkbox" class="checkbox" name="fulfillment" id="checkbox" onChange="this.form.submit()"/>
+                                  <label for="checkbox"><span style="font-size: 18px; margin-right: 80px;">Fulfillment</span></label>
+                              </form>
+                      <% } ;%>
+                      <button class="print_button" type="button" name="button" onclick="PrintElem(label)"><i class="fas fa-print"></i>Label</button>
+                  </div>
+
+
+                </div>
+              </div>
+
+    <table class="admin-order-table">
+        <tr>
+            <td>
+                Courier:
+                    <% if(order[0].assigned==true){ %>
+                        <%= order[0].assigned_to %>
+                        <% } ;%>
+                        <br>
+                        <form action="/admin<%= order[0].order_id %> " method="POST">
+                            <select class="courier_select" name="courier_select">
+                                <% couriers.forEach(function(c){ %>
+                                <option value="<%= c.username %>" name="courier"><%= c.username %></option>
+                                <% } );%>
+                            </select>
+                            <input class="submit-button" type="submit" value="submit">
+                        </form>
+        </td>
+        <td>
+            Comments:
+                <% if (order[0].comments.length!=0) { %>
+                    <% order[0].comments.forEach(function(c, i){ %>
+                        <%= c %>
+                <% }) }; %>
+        </td>
+        <td>
+                <div class="form-group">
+                    <form action="/admin<%= order[0].order_id %> " method="POST">
+                        <textarea class="admin-comment-textarea"name="order_comment" ></textarea>
+                        <input class="text-submit-button" type="submit" value="add">
+                    </form>
+                </div>
+        </td>
+        </tr>
+
+
+
+</table>
+<br>
+            <table>
+                <% products.forEach(function(p){ %>
+                    <% order[0].order.line_items.forEach(function(o, index){ %>
+
+                        <% if (p.id===o.product_id){ %>
+                            <tr>
+                                <td class="order_detail_image_table "><img src="<%= p.image.src %>" width="100%"></td>
+                                <td class="order_title_info_table">  SKU:<br>
+                                                                                            Product Name:<br>
+                                                                                            Quantity: <br>
+                                                                                            Size: <br>
+                                                                                            Price:  <br><br>
+                                                                                        <button class="update_button" type="button" name="button">Update Details</button>
+                                </td>
+                                <td class="order_detail_info_table"> <%= p.id %><br>
+                                                                                            <%= p.title %> <br>
+                                                                                            <%= order[0].order.line_items[index].quantity %><br>
+                                                                                            <%= order[0].order.line_items[index].variant_title %><br>
+                                                                                            <%= p.variants[0].price %> <br><br>
+
+                                </td>
+
+                            </tr>
+                        <% } %>
+                    <% }) %>
+                <% }); %>
+
+            </table>
+
+            </main>
+      </div>
+    </div>
+
+    <div style="display: none;">
+
+        <table id="label" class="label">
+
+                        <tr>
+                            <td  colspan="2"class="header_label">RBRCK Delivery<img class="logo_label" src="assets/logos/rbrck_logo_white.png"></td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="ship_label">  Ship to:<br></td>
+                            <td class="address_label">
+                                <%= order[0].order.shipping_address.first_name %>    <%= order[0].order.shipping_address.last_name %><br><br>
+                                <%= order[0].order.shipping_address.address1 %> ,<%= order[0].order.shipping_address.address2 %><br>
+                                <%= order[0].order.shipping_address.city %> ,  <%= order[0].order.shipping_address.zip %>,<br>
+                                <%= order[0].order.shipping_address.country %> <br>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="qr_info_label">
+                            OD: <%= order[0].order.created_at.slice(8, 10) + "-"+order[0].order.created_at.slice(5, 7)+"-"+order[0].order.created_at.slice(0, 4) %> <br>
+                            Si: None<br>
+                            Desc: Clothing <br>
+                            Return Service<br>
+                            Ref. Enclosed<br>
+                        </td>
+                            <td class="qr_label"><img class="qr_code" src="https://api.qrserver.com/v1/create-qr-code/?data=<%= order[0].order_id %>" alt="" title="" width="150px" /></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" class="tracking_label">Tracking # <span style="font-weight:500;"><%= order[0].order_id %></span></td>
+                        </tr>
+
+
+        </table>
+
+    </div>
+
+<script type="text/javascript">
+
+function PrintElem(elem)
+{
+    $(elem).printElement({leaveOpen:true,printMode:'popup'});
+}
+
+</script>
+
+
+
+<% include partials/footer_grey %>
